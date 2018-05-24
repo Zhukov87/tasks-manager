@@ -15,7 +15,7 @@ class AddForm extends Component {
         text: '',
         priority: 1,
         checkUp: false,
-        deadline: undefined,
+        deadline: "2018-05-24",
         creationDate: undefined
       };
 
@@ -34,7 +34,7 @@ class AddForm extends Component {
             text: '',
             priority: 1,
             checkUp: false,
-            deadline: undefined,
+            deadline: "2018-05-24",
             creationDate: undefined
         });
     }
