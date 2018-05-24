@@ -2,7 +2,8 @@ export default store => next => action => {
     console.log('-----', 'generateID', action);
     action.payload.id = makeid();
     const creationDate = new Date();
-    action.payload.creationDate = creationDate.getFullYear().toString() + '-' + '0' + creationDate.getDay() + '-' + '0' + creationDate.getMonth();
+    action.payload.creationDate = creationDate.getFullYear() + '-' + ('0' + (creationDate.getMonth() + 1)).slice(-2) + '-' + ('0' + creationDate.getDate()).slice(-2)
+    ;
     next(action);
 }
 

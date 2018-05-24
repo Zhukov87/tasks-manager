@@ -1,14 +1,17 @@
-import { ADD_TASK, DELETE_TASK } from '../actionCreators/constants';
+import { ADD_TASK, DELETE_TASK, SORT_BY, CHECKED_TASK } from '../actionCreators/constants';
 
-const initialState = [];
+const initialState = {
+    tasks: []
+};
 
 export default (tasksState = initialState, action) => {
     const { type, payload } = action;
 
     switch(type) {
         case ADD_TASK: {
-            let nextState = [].concat(tasksState);
-            nextState.push({
+            let nextState = {...tasksState};
+            const nextTask = [];
+            nextTask.push({
                 text: payload.text,
                 priority: payload.priority,
                 checkUp: payload.checkUp,
@@ -16,20 +19,34 @@ export default (tasksState = initialState, action) => {
                 creationDate: payload.creationDate,
                 id: payload.id
             });
+            nextState.tasks = nextTask.concat(nextState.tasks);
             return nextState;
         }
 
         case DELETE_TASK: {
-            let nextState = [].concat(tasksState);
-            if(!nextState.length)
+            let nextState = {...tasksState};
+            const nextTask = [].concat(nextState.tasks);
+            if(!nextState.tasks.length)
                 return tasksState;
-            return nextState.filter(task => {
-                console.log('task.id', task.id);
-                console.log('payload.id', payload.id);
-                return task.id !== payload.id;
+            nextState.tasks = nextTask.filter(task => {
+                return task.id !== payload.deletedId;
             })
+            return nextState;
+        }
+
+        case CHECKED_TASK: {
+            let nextState = {...tasksState};
+            const nextTask = [].concat(nextState.tasks);
+            nextState.tasks = nextTask.map(task => {  
+                if(task.id === payload.checkedId) {  
+                    task.checkUp = !task.checkUp
+                    return task;
+                }
+                return task;
+            });
+            console.log('nextstate checked task', nextState);
+            return nextState;
         }
     }
-
     return tasksState;
 }

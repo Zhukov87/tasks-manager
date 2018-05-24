@@ -14,9 +14,9 @@ class AddForm extends Component {
     state = {
         text: '',
         priority: 1,
-        checkUp: 'false',
+        checkUp: false,
         deadline: undefined,
-        creationDate: new Date()
+        creationDate: undefined
       };
 
       handleSubmit = (ev) => {
@@ -33,9 +33,9 @@ class AddForm extends Component {
         this.setState({
             text: '',
             priority: 1,
-            checkUp: 'false',
+            checkUp: false,
             deadline: undefined,
-            creationDate: new Date()
+            creationDate: undefined
         });
     }
 
@@ -67,11 +67,9 @@ class AddForm extends Component {
                         </Select>
                     </FormControl>
                     <FormControl>
-                        <InputLabel htmlFor="CheckUp">CheckUp</InputLabel>
                         <Checkbox
                             checked={this.state.checkUp}
-                            onChange={(event) => {this.setState({checkUp: event.target.value})}}
-                            value={'true'}
+                            onChange={(event) => {!this.state.checkUp ? this.setState({checkUp: true}) : this.setState({checkUp: false}) }}
                         />
                     </FormControl>
                     <FormControl>

@@ -1,4 +1,4 @@
-import { ADD_TASK, DELETE_TASK, CHANGE_PRIORITY, MARK_AS_DONE } from './constants';
+import { ADD_TASK, DELETE_TASK, SORT_BY, CHECKED_TASK } from './constants';
 
 export function addTask(text, priority, checkUp, deadline, creationDate, id) {
     return {
@@ -7,23 +7,23 @@ export function addTask(text, priority, checkUp, deadline, creationDate, id) {
     }
 }
 
-export function deleteTask(id) {
+export function deleteTask(deletedId) {
     return {
         type: DELETE_TASK,
-        payload: { id }
+        payload: { deletedId }
     }
 }
 
-export function changePriority(id, priority) {
+export function sortBy(sortBy) {
     return {
-        type: CHANGE_PRIORITY,
-        payload: { id, priority }
+        type: SORT_BY,
+        payload: { sortBy }
     }
 }
 
-export function markAsDone(id) {
+export function checkedTask(checkedId) {
     return {
-        type: MARK_AS_DONE,
-        payload: { id }
+        type: CHECKED_TASK,
+        payload: { checkedId }
     }
 }
