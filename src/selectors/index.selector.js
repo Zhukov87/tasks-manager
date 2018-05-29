@@ -1,48 +1,42 @@
 import { createSelector } from 'reselect';
+import { viewAllTasks } from '../actionCreators/actionCreatiors';
 
 const tasksSelector = (state) => {
     return state.task.tasks;
 }
 
 const filtersSelector = (state) => {
-    return state.filters.filters;
+    console.log('state.filters', state.filters);
+    return state.filters;
 }
 
-export const filteredTasks = createSelector(tasksSelector, filtersSelector, (tasks, filters) => {
-    
-    switch(filters) {
-        case 'SORT_BY_DATE': {
-            const sortedTask = tasks.sort(function(task1,task2){
-                return new Date(task1.creationDate) - new Date(task2.creationDate);
-            });
-            tasks = [].concat(sortedTask);
-            return {
-                tasks
-            }            
-        }
-
-        case 'SORT_BY_PRIORITY': {
-            const sortedTask = tasks.sort((task1, task2) => {
-                return task1.priority - task2.priority;
-            });
-            tasks = [].concat(sortedTask);
-            return {
-                tasks
-            }            
-        }
-
-        case 'SORT_BY_DEADLINE': {
-            const sortedTask = tasks.sort(function(task1,task2){
-                return new Date(task1.deadline) - new Date(task2.deadline);
-            });
-            tasks = [].concat(sortedTask);
-            return {
-                tasks
-            }               
-        }
+const filteredCheckedTasksSelector = createSelector(tasksSelector, filtersSelector, (tasks, filters) => {
+    if(filters.viewAllTasks) {
+        return tasks;
     }
     
+    return tasks.filter((task) => {
+        if(task.checkUp == false) {
+            return task;
+        }
+    });
+});
+
+export const filteredTasks = createSelector(filteredCheckedTasksSelector, filtersSelector, (tasks, filters) => {
+    const activeFilter = filters.filters;
+
+    const sortFunctions = {
+        SORT_BY_DATE: (task1,task2) => new Date(task1.creationDate) - new Date(task2.creationDate),
+        SORT_BY_PRIORITY: (task1, task2) => task1.priority - task2.priority,
+        SORT_BY_DEADLINE: (task1,task2) => new Date(task1.deadline) - new Date(task2.deadline)
+    }
+
+    if(activeFilter != '') {
+        return tasks.sort(sortFunctions[activeFilter]);
+    }
+
     return {
         tasks
     }
+
 });

@@ -37,14 +37,13 @@ export default (tasksState = initialState, action) => {
         case CHECKED_TASK: {
             let nextState = {...tasksState};
             const nextTask = [].concat(nextState.tasks);
-            nextState.tasks = nextTask.map(task => {  
+            nextState.tasks = nextTask.map(task => {
                 if(task.id === payload.checkedId) {  
-                    task.checkUp = !task.checkUp
-                    return task;
+                    task.checkUp = !task.checkUp;
+                    return {...task};
                 }
-                return task;
+                return {...task};
             });
-            console.log('nextstate checked task', nextState);
             return nextState;
         }
     }

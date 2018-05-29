@@ -1,4 +1,4 @@
-import { ADD_TASK, DELETE_TASK, SORT_BY, CHECKED_TASK } from './constants';
+import { ADD_TASK, DELETE_TASK, SORT_BY, CHECKED_TASK, VIEW_ALL_TASKS } from './constants';
 
 export function addTask(text, priority, checkUp, deadline, creationDate, id) {
     return {
@@ -18,6 +18,12 @@ export function sortBy(sortBy) {
     return {
         type: SORT_BY,
         payload: { sortBy }
+    }
+}
+
+export function viewAllTasks() {
+    return {
+        type: VIEW_ALL_TASKS
     }
 }
 
