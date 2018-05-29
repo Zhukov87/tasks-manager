@@ -32,7 +32,11 @@ export const filteredTasks = createSelector(filteredCheckedTasksSelector, filter
     }
 
     if(activeFilter != '') {
-        return tasks.sort(sortFunctions[activeFilter]);
+        const filteredTasks = tasks.sort(sortFunctions[activeFilter]);
+        tasks = [].concat(filteredTasks);
+        return {
+            tasks
+        }
     }
 
     return {
