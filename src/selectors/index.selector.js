@@ -6,7 +6,6 @@ const tasksSelector = (state) => {
 }
 
 const filtersSelector = (state) => {
-    console.log('state.filters', state.filters);
     return state.filters;
 }
 
@@ -34,13 +33,16 @@ export const filteredTasks = createSelector(filteredCheckedTasksSelector, filter
     if(activeFilter != '') {
         const filteredTasks = tasks.sort(sortFunctions[activeFilter]);
         tasks = [].concat(filteredTasks);
+        console.log('state.filters', filters);
         return {
-            tasks
+            tasks: tasks,
+            filters: filters
         }
     }
 
     return {
-        tasks
+        tasks: tasks,
+        filters: filters
     }
 
 });

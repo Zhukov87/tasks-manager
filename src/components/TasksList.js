@@ -4,12 +4,80 @@ import { connect } from 'react-redux';
 import { filteredTasks } from '../selectors/index.selector';
 import { sortBy } from '../actionCreators/actionCreatiors';
 import { viewAllTasks } from '../actionCreators/actionCreatiors';
+import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
+import { grey300, grey600 } from 'material-ui/styles/colors';
+import { blue400 } from 'material-ui/styles/colors';
+import { grey50 } from 'material-ui/styles/colors';
+import classNames from 'classnames';
+import { grey700 } from 'material-ui/styles/colors';
+
+
+const styles = ({
+    title: {
+        paddingLeft: 70,
+        paddingTop: 10,
+        fontWeight: 800
+    },
+    sortedPanel: {
+        maxWidth: 505,
+        margin: 50,
+        background: grey300,
+        marginTop: 20,
+        padding: 20,
+        paddingLeft: 15,
+        paddingRight: 15
+    },
+    caption: {
+        width: 40,
+        display: 'inline-block',
+        fontSize: 15
+    },
+    sortByButtons: {
+        background: grey300,
+        borderWidth: 1,
+        borderColor: grey300,
+        color: grey600,
+        outlineStyle: 'none',
+        fontSize: 15,
+        '&:hover': {
+            color: blue400
+          }
+    },
+    sortByButtonSelected: {
+        background: grey300,
+        borderWidth: 1,
+        borderColor: grey300,
+        color: blue400,
+        outlineStyle: 'none',
+        fontSize: 15,
+        '&:hover': {
+            color: blue400
+          }
+    },
+    hideButton: {
+        float: 'right',
+        paddingLeft: 0,
+        paddingRight: 0,
+        background: grey300,
+        borderWidth: 1,
+        borderColor: grey300,
+        fontSize: 15,
+        color: grey600,
+        outlineStyle: 'none',
+        '&:hover': {
+            color: blue400
+          }
+    },
+    noTasks: {
+        marginLeft: 70
+    }
+});
 
 class TasksList extends Component {
-    renderBody(tasks) {
-        //console.log('tasks', tasks)
+    renderBody(tasks, classes) {
         if (!tasks.length) {
-            return <p>No tasks yet</p>;
+            return <p className={classNames(classes.noTasks)} >No tasks yet</p>;
         }
         return (
             <div>
@@ -29,17 +97,56 @@ class TasksList extends Component {
     }
     
     render() {
-        console.log('this.props.filteredTasks', this.props.filteredTasks);
+        const { classes, filters } = this.props;
+        console.log('this.props', this.props);
+        
+
         return(
             <div>
-                <button onClick={() => this.handleSort('SORT_BY_DATE')} >Sort by date</button>
-                <button onClick={() => this.handleSort('SORT_BY_PRIORITY')} >Sort by priority</button>
-                <button onClick={() => this.handleSort('SORT_BY_DEADLINE')} >Sort by deadline</button>
-                <button onClick={() => this.handleViewTasks()} >View all tasks</button>
-                {this.renderBody(this.props.tasks)}
+                <Typography variant="title" style={styles.title} >Задачи</Typography>
+                <div style={styles.sortedPanel} >
+                    <Typography variant="caption" className={classNames(classes.caption)} >Сорт:</Typography>
+                    <button 
+                        onClick={() => this.handleSort('SORT_BY_DATE')} 
+                        className={
+                            (filters != undefined && filters.filters == 'SORT_BY_DATE') ? 
+                                classNames(classes.sortByButtonSelected) :
+                                classNames(classes.sortByButtons)
+                        } 
+                    >
+                        Sort by date
+                    </button>
+                    <button 
+                        onClick={() => this.handleSort('SORT_BY_PRIORITY')} 
+                        className={
+                            (filters != undefined && filters.filters == 'SORT_BY_PRIORITY') ? 
+                                classNames(classes.sortByButtonSelected) :
+                                classNames(classes.sortByButtons)
+                        } 
+                    >
+                        Sort by priority
+                    </button>
+                    <button 
+                        onClick={() => this.handleSort('SORT_BY_DEADLINE')} 
+                        className={
+                            (filters != undefined && filters.filters == 'SORT_BY_DEADLINE') ? 
+                                classNames(classes.sortByButtonSelected) :
+                                classNames(classes.sortByButtons)
+                        } 
+                    >
+                        Sort by deadline
+                    </button>
+                    <button 
+                        onClick={() => this.handleViewTasks()} 
+                        className={classNames(classes.hideButton)} 
+                    >
+                        {filters != undefined && filters.viewAllTasks ? 'Hide completed' : 'Show completed'}
+                    </button>
+                </div>
+                {this.renderBody(this.props.tasks, classes)}
             </div>
         );
     }
 }
 
-export default connect(filteredTasks, { sortBy, viewAllTasks })(TasksList);
+export default withStyles(styles)(connect(filteredTasks, { sortBy, viewAllTasks })(TasksList));
